@@ -58,7 +58,7 @@ end
 
 loadSettings()
 
-local updateInfoUrl = "https://raw.githubusercontent.com/Flashlavka/ssss/refs/heads/main/update.json"
+local updateInfoUrl = "https://raw.githubusercontent.com/Flashlavka/GoogleTablemake/refs/heads/main/update.json"
 local csvURL = nil
 local allowedNicknames = {}
 local currentExpirationDate = ""
@@ -77,10 +77,10 @@ local customCsvURLInput = ffi.new("char[512]", windowSettings.customCsvURL)
 
 local function toLowerCyrillic(str)
     local map = {
-        ["А"]="а",["Б"]="б",["В"]="в",["Г"]="г",["Д"]="д",["Е"]="е",["Ё"]="ё",["Ж"]="ж",["З"]="з",["И"]="и",
-        ["Й"]="й",["К"]="к",["Л"]="л",["М"]="м",["Н"]="н",["О"]="о",["П"]="п",["Р"]="р",["С"]="с",["Т"]="т",
-        ["У"]="у",["Ф"]="ф",["Х"]="х",["Ц"]="ц",["Ч"]="ч",["Ш"]="ш",["Щ"]="щ",["Ъ"]="ъ",["Ы"]="ы",["Ь"]="ь",
-        ["Э"]="э",["Ю"]="ю",["Я"]="я"
+        ["Рђ"]="Р°",["Р‘"]="Р±",["Р’"]="РІ",["Р“"]="Рі",["Р”"]="Рґ",["Р•"]="Рµ",["РЃ"]="С‘",["Р–"]="Р¶",["Р—"]="Р·",["Р"]="Рё",
+        ["Р™"]="Р№",["Рљ"]="Рє",["Р›"]="Р»",["Рњ"]="Рј",["Рќ"]="РЅ",["Рћ"]="Рѕ",["Рџ"]="Рї",["Р "]="СЂ",["РЎ"]="СЃ",["Рў"]="С‚",
+        ["РЈ"]="Сѓ",["Р¤"]="С„",["РҐ"]="С…",["Р¦"]="С†",["Р§"]="С‡",["РЁ"]="С€",["Р©"]="С‰",["РЄ"]="СЉ",["Р«"]="С‹",["Р¬"]="СЊ",
+        ["Р­"]="СЌ",["Р®"]="СЋ",["РЇ"]="СЏ"
     }
     for up, low in pairs(map) do str = str:gsub(up, low) end
     return str:lower()
@@ -114,13 +114,13 @@ local function isNicknameAllowed()
         if name and name == currentNick then
             currentExpirationDate = date_string
             if checkExpiration(date_string) then
-                sampAddChatMessage(string.format("{FF0000}[Tmarket] {FFC800}%s{FFFFFF} срок действия скрипта истёк. Обратитесь к разработчику для продления.", currentNick), 0xFFFFFF)
+                sampAddChatMessage(string.format("{FF0000}[Tmarket] {FFC800}%s{FFFFFF} СЃСЂРѕРє РґРµР№СЃС‚РІРёСЏ СЃРєСЂРёРїС‚Р° РёСЃС‚С‘Рє. РћР±СЂР°С‚РёС‚РµСЃСЊ Рє СЂР°Р·СЂР°Р±РѕС‚С‡РёРєСѓ РґР»СЏ РїСЂРѕРґР»РµРЅРёСЏ.", currentNick), 0xFFFFFF)
                 return false
             end
             return true
         end
     end
-    sampAddChatMessage(string.format("{00FF00}[Tmarket] {FFC800}%s{FFFFFF} , вам доступ запрещён.", currentNick), -1)
+    sampAddChatMessage(string.format("{00FF00}[Tmarket] {FFC800}%s{FFFFFF} , РІР°Рј РґРѕСЃС‚СѓРї Р·Р°РїСЂРµС‰С‘РЅ.", currentNick), -1)
     return false
 end
 
@@ -185,7 +185,7 @@ local function checkForUpdates()
                             if status == "completed" then
                                 local ok = thread:get()
                                 if ok then
-                                    sampAddChatMessage("{00FF00}[Tmarket]{FFFFFF} Обновление загружено.", 0xFFFFFF)
+                                    sampAddChatMessage("{00FF00}[Tmarket]{FFFFFF} РћР±РЅРѕРІР»РµРЅРёРµ Р·Р°РіСЂСѓР¶РµРЅРѕ.", 0xFFFFFF)
                                 end
                                 return
                             elseif status == "canceled" then return end
@@ -322,7 +322,7 @@ local function drawTable(data)
     if isLoading or not firstLoadComplete or not data then
         drawSpinner()
         imgui.Dummy(imgui.ImVec2(0, 40))
-        CenterText(u8"Загрузка таблицы...")
+        CenterText(u8"Р—Р°РіСЂСѓР·РєР° С‚Р°Р±Р»РёС†С‹...")
         return
     end
 
@@ -346,7 +346,7 @@ local function drawTable(data)
     imgui.BeginChild("scrollingRegion", imgui.ImVec2(-1, -1), true)
 
     if #filtered == 1 and filter ~= "" then
-        CenterText(u8"Совпадений нет.")
+        CenterText(u8"РЎРѕРІРїР°РґРµРЅРёР№ РЅРµС‚.")
         imgui.EndChild()
         return
     end
@@ -470,27 +470,27 @@ imgui.OnFrame(function() return renderWindow[0] end, function()
         end
 
         if showSettings[0] then
-            iconButton(fa.ARROW_LEFT, u8"Назад к таблице", function()
+            iconButton(fa.ARROW_LEFT, u8"РќР°Р·Р°Рґ Рє С‚Р°Р±Р»РёС†Рµ", function()
                 showSettings[0] = false
             end)
             imgui.SameLine()
         else
             imgui.PushItemWidth(availWidth * 0.75)
-            imgui.InputTextWithHint("##search", u8"Поиск по таблице...", searchInput, ffi.sizeof(searchInput))
+            imgui.InputTextWithHint("##search", u8"РџРѕРёСЃРє РїРѕ С‚Р°Р±Р»РёС†Рµ...", searchInput, ffi.sizeof(searchInput))
             imgui.PopItemWidth()
 
             imgui.SameLine()
-            iconButton(fa.ERASER, u8"Очистить поиск", function()
+            iconButton(fa.ERASER, u8"РћС‡РёСЃС‚РёС‚СЊ РїРѕРёСЃРє", function()
                 ffi.fill(searchInput, ffi.sizeof(searchInput))
             end)
 
             imgui.SameLine()
-            iconButton(fa.ROTATE, u8"Обновить таблицу", function()
+            iconButton(fa.ROTATE, u8"РћР±РЅРѕРІРёС‚СЊ С‚Р°Р±Р»РёС†Сѓ", function()
                 updateCSV()
             end)
 
             imgui.SameLine()
-            iconButton(fa.GEARS, u8"Настройки", function()
+            iconButton(fa.GEARS, u8"РќР°СЃС‚СЂРѕР№РєРё", function()
                 showSettings[0] = not showSettings[0]
             end)
         end
@@ -499,7 +499,7 @@ imgui.OnFrame(function() return renderWindow[0] end, function()
 
         if showSettings[0] then
             CenterText(u8"Settings legacy script <3")
-            imgui.Text(u8"Курс множителя цен в таблице")
+            imgui.Text(u8"РљСѓСЂСЃ РјРЅРѕР¶РёС‚РµР»СЏ С†РµРЅ РІ С‚Р°Р±Р»РёС†Рµ")
             imgui.Separator()
 
             local function inputMultiplier(label, var)
@@ -509,44 +509,44 @@ imgui.OnFrame(function() return renderWindow[0] end, function()
                 imgui.PopItemWidth()
             end
 
-            inputMultiplier(u8"Курс покупки VC$", buyVcInput)
+            inputMultiplier(u8"РљСѓСЂСЃ РїРѕРєСѓРїРєРё VC$", buyVcInput)
             windowSettings.buyVc = buyVcInput[0]
 
-            inputMultiplier(u8"Курс продажи VC$", sellVcInput)
+            inputMultiplier(u8"РљСѓСЂСЃ РїСЂРѕРґР°Р¶Рё VC$", sellVcInput)
             windowSettings.sellVc = sellVcInput[0]
 
             imgui.Spacing()
             imgui.Separator()
 
 
-            imgui.Text(u8"Пользовательская ссылка на CSV-таблицу:")
+            imgui.Text(u8"РџРѕР»СЊР·РѕРІР°С‚РµР»СЊСЃРєР°СЏ СЃСЃС‹Р»РєР° РЅР° CSV-С‚Р°Р±Р»РёС†Сѓ:")
             imgui.PushItemWidth(availWidth * 0.8)
-            imgui.InputTextWithHint("##customCsvURL", u8"Вставьте ссылку на Google Таблицу...", customCsvURLInput, ffi.sizeof(customCsvURLInput))
+            imgui.InputTextWithHint("##customCsvURL", u8"Р’СЃС‚Р°РІСЊС‚Рµ СЃСЃС‹Р»РєСѓ РЅР° Google РўР°Р±Р»РёС†Сѓ...", customCsvURLInput, ffi.sizeof(customCsvURLInput))
             windowSettings.customCsvURL = u8:decode(ffi.string(customCsvURLInput))
             imgui.PopItemWidth()
-            if imgui.IsItemHovered() then imgui.SetTooltip(u8"Ваша ссылка на Google Таблицу. Если поле пустое, будет использоваться ссылка по умолчанию.") end
+            if imgui.IsItemHovered() then imgui.SetTooltip(u8"Р’Р°С€Р° СЃСЃС‹Р»РєР° РЅР° Google РўР°Р±Р»РёС†Сѓ. Р•СЃР»Рё РїРѕР»Рµ РїСѓСЃС‚РѕРµ, Р±СѓРґРµС‚ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊСЃСЏ СЃСЃС‹Р»РєР° РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ.") end
 
             imgui.SameLine()
-            iconButton(fa.TRASH_CAN, u8"Очистить ссылку", function()
+            iconButton(fa.TRASH_CAN, u8"РћС‡РёСЃС‚РёС‚СЊ СЃСЃС‹Р»РєСѓ", function()
                 ffi.fill(customCsvURLInput, ffi.sizeof(customCsvURLInput))
                 windowSettings.customCsvURL = ""
             end)
 
-            CenterText(u8"Как использовать Google Таблицу в скрипте:")
-            imgui.Text(u8"1 - Если у вас уже есть ссылка на открытую Google Таблицу,просто скопируйте её и вставьте в поле ниже.")
-            imgui.Text(u8"2 - Если таблица закрытая, откройте её в Google Sheets и опубликуйте в интернете")
-            imgui.Text(u8"3 - Меню: Файл > Опубликовать в интернете")
-            imgui.Text(u8"4 - Скопируйте ссылку публикации и вставьте в поле скрипта.")
-            imgui.Text(u8"5 - После вставки нажмите «Обновить таблицу» для загрузки данных.")
-            imgui.Text(u8"6 - Скрипт автоматически преобразует обычные ссылки из адресной строки.")
-            imgui.Text(u8"7 - Убедитесь, что таблица доступна по ссылке для корректной загрузки.")
-            imgui.Text(u8"8 - P.s пжшка, учтите, если таблица закрыта и не опубликована, данные с таблицы не будут загружены")
+            CenterText(u8"РљР°Рє РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ Google РўР°Р±Р»РёС†Сѓ РІ СЃРєСЂРёРїС‚Рµ:")
+            imgui.Text(u8"1 - Р•СЃР»Рё Сѓ РІР°СЃ СѓР¶Рµ РµСЃС‚СЊ СЃСЃС‹Р»РєР° РЅР° РѕС‚РєСЂС‹С‚СѓСЋ Google РўР°Р±Р»РёС†Сѓ,РїСЂРѕСЃС‚Рѕ СЃРєРѕРїРёСЂСѓР№С‚Рµ РµС‘ Рё РІСЃС‚Р°РІСЊС‚Рµ РІ РїРѕР»Рµ РЅРёР¶Рµ.")
+            imgui.Text(u8"2 - Р•СЃР»Рё С‚Р°Р±Р»РёС†Р° Р·Р°РєСЂС‹С‚Р°СЏ, РѕС‚РєСЂРѕР№С‚Рµ РµС‘ РІ Google Sheets Рё РѕРїСѓР±Р»РёРєСѓР№С‚Рµ РІ РёРЅС‚РµСЂРЅРµС‚Рµ")
+            imgui.Text(u8"3 - РњРµРЅСЋ: Р¤Р°Р№Р» > РћРїСѓР±Р»РёРєРѕРІР°С‚СЊ РІ РёРЅС‚РµСЂРЅРµС‚Рµ")
+            imgui.Text(u8"4 - РЎРєРѕРїРёСЂСѓР№С‚Рµ СЃСЃС‹Р»РєСѓ РїСѓР±Р»РёРєР°С†РёРё Рё РІСЃС‚Р°РІСЊС‚Рµ РІ РїРѕР»Рµ СЃРєСЂРёРїС‚Р°.")
+            imgui.Text(u8"5 - РџРѕСЃР»Рµ РІСЃС‚Р°РІРєРё РЅР°Р¶РјРёС‚Рµ В«РћР±РЅРѕРІРёС‚СЊ С‚Р°Р±Р»РёС†СѓВ» РґР»СЏ Р·Р°РіСЂСѓР·РєРё РґР°РЅРЅС‹С….")
+            imgui.Text(u8"6 - РЎРєСЂРёРїС‚ Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРё РїСЂРµРѕР±СЂР°Р·СѓРµС‚ РѕР±С‹С‡РЅС‹Рµ СЃСЃС‹Р»РєРё РёР· Р°РґСЂРµСЃРЅРѕР№ СЃС‚СЂРѕРєРё.")
+            imgui.Text(u8"7 - РЈР±РµРґРёС‚РµСЃСЊ, С‡С‚Рѕ С‚Р°Р±Р»РёС†Р° РґРѕСЃС‚СѓРїРЅР° РїРѕ СЃСЃС‹Р»РєРµ РґР»СЏ РєРѕСЂСЂРµРєС‚РЅРѕР№ Р·Р°РіСЂСѓР·РєРё.")
+            imgui.Text(u8"8 - P.s РїР¶С€РєР°, СѓС‡С‚РёС‚Рµ, РµСЃР»Рё С‚Р°Р±Р»РёС†Р° Р·Р°РєСЂС‹С‚Р° Рё РЅРµ РѕРїСѓР±Р»РёРєРѕРІР°РЅР°, РґР°РЅРЅС‹Рµ СЃ С‚Р°Р±Р»РёС†С‹ РЅРµ Р±СѓРґСѓС‚ Р·Р°РіСЂСѓР¶РµРЅС‹")
             imgui.Separator()
 
             if currentExpirationDate and currentExpirationDate ~= "" then
-                imgui.Text(u8("Последний день подписки: ") .. u8(currentExpirationDate))
+                imgui.Text(u8("РџРѕСЃР»РµРґРЅРёР№ РґРµРЅСЊ РїРѕРґРїРёСЃРєРё: ") .. u8(currentExpirationDate))
             else
-                imgui.Text(u8"Информация о подписке недоступна.")
+                imgui.Text(u8"РРЅС„РѕСЂРјР°С†РёСЏ Рѕ РїРѕРґРїРёСЃРєРµ РЅРµРґРѕСЃС‚СѓРїРЅР°.")
             end
             imgui.Spacing()
             imgui.Separator()
@@ -579,7 +579,7 @@ function main()
         return
     end
 
-    sampAddChatMessage("{00FF00}[Tmarket]{FFFFFF} Скрипт загружен. Для активации используйте {00FF00}/tm", 0xFFFFFF)
+    sampAddChatMessage("{00FF00}[Tmarket]{FFFFFF} РЎРєСЂРёРїС‚ Р·Р°РіСЂСѓР¶РµРЅ. Р”Р»СЏ Р°РєС‚РёРІР°С†РёРё РёСЃРїРѕР»СЊР·СѓР№С‚Рµ {00FF00}/tm", 0xFFFFFF)
 
     sampRegisterChatCommand('tm', function()
         renderWindow[0] = not renderWindow[0]
